@@ -5,13 +5,12 @@ class AppRoutes {
   static const initialRoute = 'login';
 
   static Map<String, Widget Function(BuildContext)> routes = {
-    'home': (_) => HomePage(),
+    'home': (_) => const HomePage(),
     'login': (_) => const LoginPage(),
     'detalle': (_) => const DetallePage(),
-    'animation': (_) => const AnimationPage(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    return MaterialPageRoute(builder: (context) => HomePage());
+    return MaterialPageRoute(builder: (context) => const HomePage());
   }
 }

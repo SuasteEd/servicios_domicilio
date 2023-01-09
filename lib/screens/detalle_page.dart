@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:servicios_domicilio/models/tecnico_model.dart';
 import 'package:servicios_domicilio/services/tecnico_response.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
 

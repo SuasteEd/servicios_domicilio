@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servicios_domicilio/controllers/servicios_controller.dart';
-import 'package:servicios_domicilio/models/tecnico_model.dart';
 
 class CustomGetList extends StatefulWidget {
   const CustomGetList({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomGetListState createState() => _CustomGetListState();
 }
 
@@ -14,7 +14,6 @@ class _CustomGetListState extends State<CustomGetList> {
   final controller = Get.put(ServiciosController());
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -110,7 +109,6 @@ class _CustomGetListState extends State<CustomGetList> {
                   },
                 ),
                 onRefresh: () {
-                  datos();
                   setState(() {});
                   return controller.getServicio();
                 });
@@ -119,22 +117,39 @@ class _CustomGetListState extends State<CustomGetList> {
   }
 
   Widget datos() {
-    if (controller.connection.isFalse) {
+    if (controller.loading.isFalse && controller.connection.isFalse) {
       return GestureDetector(
-        onTap: () => controller.getServicio(),
-        child: const Center(
-          child: Text('No hay conexión a internet'),
+        onTap: () => {this, setState(() {}), controller.getServicio()},
+        child: Column(
+          children: const [
+            FadeInImage(
+              placeholder: AssetImage('assets/connection.png'),
+              image: AssetImage('assets/connection.png'),
+              width: 300,
+              height: 400,
+            ),
+            Text('Sin conexión a internet')
+          ],
         ),
       );
     }
 
-    // if (controller.servicios.isEmpty) {
-    //   return GestureDetector(
-    //     onTap: () => controller.getServicio(),
-    //     child: const Text('No hay datos para mostrar'),
-    //   );
-    //}
-
+    if (controller.loading.isTrue && controller.servicios.isEmpty) {
+      return GestureDetector(
+        onTap: () => {this, setState(() {}), controller.getServicio()},
+        child: Column(
+          children: const [
+            FadeInImage(
+              placeholder: AssetImage('assets/nada.png'),
+              image: AssetImage('assets/nada.png'),
+              width: 300,
+              height: 400,
+            ),
+            Text('No hay entregas')
+          ],
+        ),
+      );
+    }
     return const Center(child: CircularProgressIndicator());
   }
 

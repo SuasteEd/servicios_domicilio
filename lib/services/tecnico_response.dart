@@ -71,6 +71,8 @@ class ServicioElement {
 }
 
 class Tecnico {
+  static var obs;
+
   Tecnico({
     required this.nombre,
     required this.fotografia,

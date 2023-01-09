@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servicios_domicilio/constants/constants.dart';
-import 'package:servicios_domicilio/models/static_tecnicos.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
 import 'package:servicios_domicilio/widgets/custom_get_list.dart';
 import 'package:servicios_domicilio/widgets/widgets.dart';
@@ -9,7 +10,7 @@ import 'package:servicios_domicilio/widgets/widgets.dart';
 import '../controllers/servicios_controller.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -18,6 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final date = DateTime.now();
   final controller = Get.put(ServiciosController());
+
   @override
   void initState() {
     Get.put(ServiciosController()).getServicio();
@@ -49,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       appBar: appBar,
       backgroundColor: AppTheme.primary,
       drawer: const DrawerWidget(),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         //physics: BouncingScrollPhysics(),
         child: _Header(),
       ),
@@ -57,11 +59,16 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class _Header extends StatelessWidget {
-  _Header();
+class _Header extends StatefulWidget {
+  const _Header();
+
+  @override
+  State<_Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<_Header> {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ServiciosController());
     return Column(
       children: [
         SafeArea(
@@ -94,28 +101,28 @@ class _Header extends StatelessWidget {
                     ),
                   ],
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(right: 50),
-                //   child: GestureDetector(
-                //     onTap: () {
-                //       Navigator.pushNamed(context, 'animation');
-                //     },
-                //     child: Container(
-                //       width: 120,
-                //       height: 50,
-                //       decoration: BoxDecoration(
-                //         color: Colors.white,
-                //         borderRadius: BorderRadius.circular(12),
-                //       ),
-                //       child: const Center(
-                //           child: Text('Agregar',
-                //               style: TextStyle(
-                //                   color: AppTheme.primary,
-                //                   fontWeight: FontWeight.bold,
-                //                   fontSize: 16))),
-                //     ),
-                //   ),
-                // ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 50),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 120,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                          child: Text('Refrescar',
+                              style: TextStyle(
+                                  color: AppTheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16))),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -147,21 +154,19 @@ class _EntregasList extends StatelessWidget {
             // Container(
             //   height: 120,
             //   decoration: const BoxDecoration(
-            //       borderRadius: BorderRadius.only(topLeft: Radius.circular(45)),
-            //       color: Colors.amber),
+            //     borderRadius: BorderRadius.only(topLeft: Radius.circular(45)),
+            //     //color: Colors.amber,
+            //   ),
             //   child: const Center(
             //     child: Padding(
             //         padding: EdgeInsets.only(left: 20), child: _DiasList()),
             //   ),
             // ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             const SingleChildScrollView(
-              child: SizedBox(
-                height: 580,
-                child: CustomGetList(),
-              ),
+              child: SizedBox(height: 580, child: CustomGetList()),
             ),
           ],
         ),
@@ -171,93 +176,6 @@ class _EntregasList extends StatelessWidget {
 
   Future<void> refresh() async {
     print('Refrescante');
-  }
-}
-
-class _CustomCards extends StatelessWidget {
-  const _CustomCards();
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      itemCount: tecnicos.length,
-      itemBuilder: (_, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          child: Container(
-            padding: const EdgeInsets.only(left: 12),
-            width: double.infinity,
-            height: 100,
-            decoration: BoxDecoration(
-              color: color(index),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, 'detalle',
-                    arguments: tecnicos[index]);
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 232, 237, 243),
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(12),
-                      bottomRight: Radius.circular(12)),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Folio: ${tecnicos[index].folio}',
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.circle,
-                                color: color(index),
-                                size: 10,
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(status(index))
-                            ],
-                          ),
-                        ],
-                      ),
-                      Text(
-                        tecnicos[index].cliente,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Text(
-                        '10:00 - 11:30',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }
 
@@ -280,6 +198,7 @@ class _DiasListState extends State<_DiasList> {
       itemCount: controller.servicios.length,
       itemBuilder: (_, index) => Container(
         padding: const EdgeInsets.all(0),
+        height: 120,
         width: 200,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -311,14 +230,16 @@ class _DiasListState extends State<_DiasList> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                '${controller.servicios[index].horario}',
+                                controller.servicios[index].fecha.day
+                                    .toString(),
                                 style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
                               Text(
-                                days[horario[index].diaSema],
+                                days[controller.servicios[index].fecha.weekday -
+                                    1],
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 11),
                               ),
@@ -327,9 +248,9 @@ class _DiasListState extends State<_DiasList> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 30),
-                      child: Text(horario[index].horario),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 30),
+                      child: Text(''),
                     )
                   ],
                 ),
@@ -340,44 +261,4 @@ class _DiasListState extends State<_DiasList> {
       ),
     );
   }
-}
-
-String status(int index) {
-  switch (tecnicos[index].estado) {
-    case 1:
-      {
-        return 'Completado';
-      }
-    case 2:
-      {
-        return 'En curso';
-      }
-    case 3:
-      {
-        return 'Cancelado';
-      }
-    default:
-      break;
-  }
-  return '';
-}
-
-Color color(int index) {
-  switch (tecnicos[index].estado) {
-    case 1:
-      {
-        return Colors.green;
-      }
-    case 2:
-      {
-        return Colors.grey;
-      }
-    case 3:
-      {
-        return Colors.red;
-      }
-    default:
-      break;
-  }
-  return Colors.white;
 }

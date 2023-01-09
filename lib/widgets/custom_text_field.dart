@@ -27,6 +27,7 @@ class _CustomInputState extends State<CustomInput> {
     return SizedBox(
       width: widget.size.width - 50,
       child: TextField(
+        autocorrect: false,
         controller: widget.controller,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(

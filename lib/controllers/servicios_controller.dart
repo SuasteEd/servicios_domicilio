@@ -7,27 +7,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ServiciosController extends GetxController {
   final servicios = <ServicioElement>[].obs;
+  final tecnico = <Tecnico>[].obs;
   final connection = false.obs;
+  final loading = false.obs;
   late int id;
   late SharedPreferences logindata;
   @override
   void onInit() async {
     logindata = await SharedPreferences.getInstance();
     init();
+    internet();
     super.onInit();
   }
 
   init() {
-    id = logindata.getInt('id')!;
+    id = logindata.getInt('id') ?? 0;
+    // getTecnico();
   }
 
   Future<void> getServicio() async {
     servicios.clear();
     await internet();
     final newServicio = await Get.find<DataSourceRepository>().getServicio(id);
-    newServicio.forEach((element) {
+
+    if (newServicio.isEmpty) {
+      loading.value = true;
+    }
+    for (var element in newServicio) {
       servicios.insert(0, element);
-    });
+    }
   }
 
   Future<void> internet() async {

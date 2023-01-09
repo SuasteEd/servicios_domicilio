@@ -2,9 +2,8 @@ import 'package:servicios_domicilio/services/tecnico_response.dart';
 import 'package:http/http.dart' as http;
 
 class DataResponse {
-  final url = Uri.parse(
-      'https://serviciosdomicilio.azurewebsites.net/api/Servicio/ServiciosTecnico?usuarioId=');
   late List<ServicioElement> servicio = [];
+  late List<Tecnico> tecnico;
 
   Future<List<ServicioElement>> getServicio(int id) async {
     final response = await http.get(

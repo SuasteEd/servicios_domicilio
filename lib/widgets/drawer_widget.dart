@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:servicios_domicilio/controllers/servicios_controller.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +14,7 @@ class DrawerWidget extends StatefulWidget {
 
 class _DrawerWidgetState extends State<DrawerWidget> {
   late SharedPreferences logindata;
+  final controller = Get.put(ServiciosController());
 
   @override
   void initState() {
@@ -32,7 +35,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         children: [
           DrawerHeader(
               child: SafeArea(
-            child: Container(),
+            child: Container(
+              child: Text(''),
+            ),
           )),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.white),

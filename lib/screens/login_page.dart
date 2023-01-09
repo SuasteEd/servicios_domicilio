@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/quickalert.dart';
-import 'package:servicios_domicilio/constants.dart';
-import 'package:servicios_domicilio/data_source/data_reponse.dart';
-import 'package:servicios_domicilio/repository/data_source_repository.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
 import 'package:servicios_domicilio/widgets/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../controllers/servicios_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -25,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   int id = 0;
   bool isLogin = false;
   late SharedPreferences logindata;
+  final controller = Get.put(ServiciosController());
 
   void initData() async {
     logindata = await SharedPreferences.getInstance();
@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     initData();
+    controller.onInit();
     super.initState();
   }
 
@@ -161,17 +162,30 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() async {
+    // if (controller.connection.isFalse) {
+    //   QuickAlert.show(
+    //     context: context,
+    //     title: 'Oh, no...',
+    //     confirmBtnText: 'Ok',
+    //     type: QuickAlertType.warning,
+    //     text: 'No tienes conexión a internet',
+    //   );
+    //   tap = false;
+    // }
     var bodyReq =
         jsonEncode({'username': username.text, 'password': password.text});
-    var url = Uri.parse(
-        'https://serviciosdomicilio.azurewebsites.net/api/Account/Login');
-    var response = await http.post(url,
-        body: bodyReq, headers: {"content-type": "application/json"});
+    var url =
+        Uri.https('serviciosdomicilio.azurewebsites.net', '/api/Account/Login');
+    var response = await http.post(url, body: bodyReq, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    });
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
       token = body["token"];
       id = body["usuarioId"];
       isLogin = true;
+      controller.id = id;
       setState(() {});
       logindata.setInt('id', id);
       logindata.setString('token', token);
@@ -183,6 +197,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
       }
     } else {
+      tap = false;
       QuickAlert.show(
         context: context,
         title: 'Oops...',
@@ -190,7 +205,6 @@ class _LoginPageState extends State<LoginPage> {
         type: QuickAlertType.error,
         text: 'Usuario o contraseña incorrectos',
       );
-      tap = false;
     }
   }
 
