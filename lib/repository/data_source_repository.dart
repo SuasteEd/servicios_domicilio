@@ -10,4 +10,8 @@ class DataSourceRepository {
     return servicio;
   }
 
+  Future<Tecnico> getTec(int id) async {
+    Tecnico tec = await _response.getTec(id);
+    return tec;
+  }
 }

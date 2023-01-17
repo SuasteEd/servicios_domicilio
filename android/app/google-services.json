@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "881327080059",
+    "project_id": "servicios-domicilio-1bfe6",
+    "storage_bucket": "servicios-domicilio-1bfe6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881327080059:android:fc11b8cbf039095385d8de",
+        "android_client_info": {
+          "package_name": "mx.com.grupoenermax.servicios_domicilio_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "881327080059-dsnuouj1u4pvepe1c5lpf4f6isbp0l81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClaLy3Os66WjjVztgKrlhfho5BDgdkEcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "881327080059-dsnuouj1u4pvepe1c5lpf4f6isbp0l81.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

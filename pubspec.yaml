@@ -42,8 +42,12 @@ dependencies:
   shared_preferences: ^2.0.15
   sqflite: ^2.2.2
   get: ^4.6.5
+  provider: ^6.0.5
   firebase_messaging: ^14.2.1
   firebase_core: ^2.4.1
+  flutter_secure_storage: ^7.0.1
+  connectivity_plus: ^3.0.2
+  animate_do: ^3.0.2
 
 dev_dependencies:
   flutter_test:

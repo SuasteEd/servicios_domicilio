@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servicios_domicilio/controllers/servicios_controller.dart';
@@ -34,11 +37,38 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           DrawerHeader(
-              child: SafeArea(
-            child: Container(
-              child: Text(''),
+            decoration: const BoxDecoration(color: Colors.white),
+            child: SafeArea(
+              child: Stack(
+                alignment: AlignmentDirectional.topStart,
+                children: [
+                  const Center(
+                    child: FadeInImage(
+                      image: AssetImage('assets/logo.png'),
+                      placeholder: AssetImage('assets/loading.gif'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  controller.tecnico.isEmpty
+                      ? const Text(
+                          'user', //controller.tecnico[0].nombre,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                              color: Colors.blueGrey),
+                        )
+                      : Text(
+                          controller.tecnico[0]
+                              .nombre, //controller.tecnico[0].nombre,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                              color: Colors.blueGrey),
+                        )
+                ],
+              ),
             ),
-          )),
+          ),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.white),
             title: const Text(

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PushNotificationService {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -10,10 +12,12 @@ class PushNotificationService {
   static Stream<String> get messageStream => _messageStream.stream;
 
   static Future initializeApp() async {
+    const storage = FlutterSecureStorage();
     //Push notiifications
     await Firebase.initializeApp();
     token = await FirebaseMessaging.instance.getToken();
     print('Token: $token');
+    storage.write(key: 'token', value: token);
     //Handlers
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
     FirebaseMessaging.onMessage.listen(_onMessageHandler);

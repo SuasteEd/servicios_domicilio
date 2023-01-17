@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:servicios_domicilio/controllers/servicios_controller.dart';
+
+import '../services/network_service.dart';
 
 class CustomGetList extends StatefulWidget {
   const CustomGetList({Key? key}) : super(key: key);
@@ -12,6 +15,7 @@ class CustomGetList extends StatefulWidget {
 
 class _CustomGetListState extends State<CustomGetList> {
   final controller = Get.put(ServiciosController());
+
   @override
   void initState() {
     super.initState();
@@ -24,11 +28,10 @@ class _CustomGetListState extends State<CustomGetList> {
       () {
         final itemCount = controller.servicios.length;
         return itemCount == 0
-            ? datos()
+            ? datos(context)
             : RefreshIndicator(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(),
                   itemCount: tecnicos.length,
                   itemBuilder: (_, index) {
                     return Padding(
@@ -116,8 +119,9 @@ class _CustomGetListState extends State<CustomGetList> {
     );
   }
 
-  Widget datos() {
-    if (controller.loading.isFalse && controller.connection.isFalse) {
+  Widget datos(BuildContext context) {
+    final connection = Provider.of<NetworkStatus>(context);
+    if (connection == NetworkStatus.offline) {
       return GestureDetector(
         onTap: () => {this, setState(() {}), controller.getServicio()},
         child: Column(

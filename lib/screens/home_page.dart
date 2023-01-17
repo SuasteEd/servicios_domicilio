@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servicios_domicilio/constants/constants.dart';
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     AppBar appBar = AppBar(
       elevation: 0,
       backgroundColor: AppTheme.primary,
-      title: Text('${months[date.month - 1]} ${date.day}'),
+      title: FadeInDown(child: Text('${months[date.month - 1]} ${date.day}')),
       centerTitle: true,
       leading: Builder(
         builder: (context) {
@@ -67,6 +68,7 @@ class _Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<_Header> {
+  final controller = Get.put(ServiciosController());
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -81,45 +83,52 @@ class _HeaderState extends State<_Header> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 50),
-                      child: Text(
-                        'Hoy',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold),
+                      padding: const EdgeInsets.only(left: 50),
+                      child: FadeInLeft(
+                        child: const Text(
+                          'Hoy',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 50),
-                      child: Text(
-                        'Tus entregas',
-                        style: TextStyle(color: Colors.white),
+                      padding: const EdgeInsets.only(left: 50),
+                      child: FadeInLeft(
+                        child: const Text(
+                          'Tus entregas',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ],
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 50),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {});
-                    },
-                    child: Container(
-                      width: 120,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                  child: FadeInRight(
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.getServicio();
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: 120,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Center(
+                            child: Text('Refrescar',
+                                style: TextStyle(
+                                    color: AppTheme.primary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16))),
                       ),
-                      child: const Center(
-                          child: Text('Refrescar',
-                              style: TextStyle(
-                                  color: AppTheme.primary,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16))),
                     ),
                   ),
                 ),
@@ -127,7 +136,7 @@ class _HeaderState extends State<_Header> {
             ),
           ),
         ),
-        const _EntregasList(),
+        FadeInUp(child: _EntregasList()),
       ],
     );
   }
@@ -172,10 +181,6 @@ class _EntregasList extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> refresh() async {
-    print('Refrescante');
   }
 }
 

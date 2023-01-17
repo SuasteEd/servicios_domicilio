@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.servicios_domicilio">
+    package="mx.com.grupoenermax.servicios_domicilio_app">
    <application
         android:label="servicios_domicilio"
         android:name="${applicationName}"

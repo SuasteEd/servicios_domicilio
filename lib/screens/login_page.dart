@@ -1,13 +1,17 @@
 import 'dart:convert';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
 import 'package:servicios_domicilio/widgets/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/servicios_controller.dart';
+import '../services/network_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -25,7 +29,9 @@ class _LoginPageState extends State<LoginPage> {
   bool isLogin = false;
   late SharedPreferences logindata;
   final controller = Get.put(ServiciosController());
-
+  final storage = const FlutterSecureStorage();
+  final GlobalKey<ScaffoldMessengerState> scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
   void initData() async {
     logindata = await SharedPreferences.getInstance();
     isLogin = logindata.getBool('isLogin') ?? false;
@@ -46,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -61,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 180,
                   child: const FadeInImage(
                     image: AssetImage('assets/logo.png'),
-                    placeholder: AssetImage('assets/logo.png'),
+                    placeholder: AssetImage('assets/moto.gif'),
                   ),
                 ),
               ),
@@ -79,35 +86,41 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 40,
                   ),
-                  const Text(
-                    'Inicio de sesión',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  FadeInDown(
+                    child: const Text(
+                      'Inicio de sesión',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  CustomInput(
-                    size: size,
-                    labelText: 'Usuario',
-                    icon: Icons.account_circle,
-                    obscureText: false,
-                    controller: username,
-                    type: TextInputType.emailAddress,
+                  FadeInLeft(
+                    child: CustomInput(
+                      size: size,
+                      labelText: 'Usuario',
+                      icon: Icons.account_circle,
+                      obscureText: false,
+                      controller: username,
+                      type: TextInputType.emailAddress,
+                    ),
                   ),
                   const SizedBox(
                     height: 30,
                   ),
-                  CustomInput(
-                    size: size,
-                    labelText: 'Contraseña',
-                    icon: Icons.lock,
-                    obscureText: true,
-                    controller: password,
-                    type: TextInputType.text,
+                  FadeInLeft(
+                    child: CustomInput(
+                      size: size,
+                      labelText: 'Contraseña',
+                      icon: Icons.lock,
+                      obscureText: true,
+                      controller: password,
+                      type: TextInputType.text,
+                    ),
                   ),
                   const SizedBox(
                     height: 30,
@@ -119,25 +132,28 @@ class _LoginPageState extends State<LoginPage> {
                         login();
                       }
                     },
-                    child: Container(
-                      width: size.width - 50,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: isLogin ? Colors.green : Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Center(
-                        child: tap
-                            ? loading()
-                            : Text(
-                                'Iniciar sesión',
-                                style: TextStyle(
-                                  color:
-                                      isLogin ? Colors.white : AppTheme.primary,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                    child: FadeInUp(
+                      child: Container(
+                        width: size.width - 50,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: isLogin ? Colors.green : Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Center(
+                          child: tap
+                              ? loading()
+                              : Text(
+                                  'Iniciar sesión',
+                                  style: TextStyle(
+                                    color: isLogin
+                                        ? Colors.white
+                                        : AppTheme.primary,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
+                        ),
                       ),
                     ),
                   ),
@@ -187,6 +203,7 @@ class _LoginPageState extends State<LoginPage> {
       isLogin = true;
       controller.id = id;
       setState(() {});
+      await sendToken(id);
       logindata.setInt('id', id);
       logindata.setString('token', token);
       logindata.setBool('isLogin', isLogin);
@@ -208,7 +225,34 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void> sendToken(int id) async {
+    final tokenAccess = await storage.read(key: 'token');
+    final url = Uri.parse(
+        "https://serviciosdomicilio.azurewebsites.net/api/Account/ActualizaTokenPush?usuarioId=$id&token=$tokenAccess");
+    var res = await http.patch(url, headers: {
+      "Accept": "application/json",
+      "content-type": "application/json"
+    });
+
+    if (res.statusCode == 200) {
+      print('Si jala');
+    } else {
+      print('No le sabes');
+    }
+  }
+
   bool validaciones() {
+    final connection = Provider.of<NetworkStatus>(context, listen: false);
+    if (connection == NetworkStatus.offline) {
+      QuickAlert.show(
+        context: context,
+        title: 'No tienes conexión a internet',
+        confirmBtnText: 'Ok',
+        type: QuickAlertType.error,
+        text: 'Intenta más tarde',
+      );
+      return false;
+    }
     if (username.text.isEmpty || password.text.isEmpty) {
       QuickAlert.show(
         context: context,
