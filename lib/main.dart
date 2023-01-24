@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         StreamProvider(
             create: (_) => NetworkService().controller.stream,
-            initialData: NetworkStatus.offline),
+            initialData: NetworkStatus.online),
       ],
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
