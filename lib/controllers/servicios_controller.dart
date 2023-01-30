@@ -45,17 +45,4 @@ class ServiciosController extends GetxController {
     tecnico.insert(0, newTec);
   }
 
-  // Future<void> internet() async {
-  //   try {
-  //     final resultado = await InternetAddress.lookup('google.com');
-  //     if (resultado.isNotEmpty && resultado[0].rawAddress.isNotEmpty) {
-  //       connection.value = true;
-  //     } else {
-  //       connection.value = false;
-  //     }
-  //   } catch (e) {
-  //     print('Error: $e');
-  //     connection.value = false;
-  //   }
-  // }
 }

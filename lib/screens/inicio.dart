@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:servicios_domicilio/helpers/shared_prefs.dart';
 import 'package:get/get.dart';
 import 'package:servicios_domicilio/screens/screens.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/servicios_controller.dart';
 
@@ -23,10 +23,8 @@ class _InicioState extends State<Inicio> {
 
   @override
   Widget build(BuildContext context) {
-    late SharedPreferences logindata;
     Future<bool> initData() async {
-      logindata = await SharedPreferences.getInstance();
-      var isLogin = logindata.getBool('isLogin') ?? false;
+      bool isLogin = getIsLoginSharedPrefs();
       if (isLogin) return true;
       return false;
     }
@@ -48,13 +46,15 @@ class _InicioState extends State<Inicio> {
                         transitionDuration: const Duration(seconds: 0)));
               });
             } else {
-              Future.microtask(() {
-                Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                        pageBuilder: (_, __, ___) => const LoginPage(),
-                        transitionDuration: const Duration(seconds: 0)));
-              });
+              Future.microtask(
+                () {
+                  Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => const LoginPage(),
+                          transitionDuration: const Duration(seconds: 0)));
+                },
+              );
             }
           }
           return Container();

@@ -34,6 +34,8 @@ class ServicioElement {
     required this.horario,
     required this.telefono,
     required this.domicilio,
+    required this.latitude,
+    required this.longitude,
   });
 
   int folio;
@@ -43,6 +45,8 @@ class ServicioElement {
   String horario;
   String telefono;
   String domicilio;
+  double longitude;
+  double latitude;
 
   factory ServicioElement.fromJson(String str) =>
       ServicioElement.fromMap(json.decode(str));
@@ -57,6 +61,8 @@ class ServicioElement {
         horario: json["horario"],
         telefono: json["telefono"],
         domicilio: json["domicilio"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -67,10 +73,13 @@ class ServicioElement {
         "horario": horario,
         "telefono": telefono,
         "domicilio": domicilio,
+        "latitude": latitude,
+        "longitude": longitude,
       };
 }
 
 class Tecnico {
+  // ignore: prefer_typing_uninitialized_variables
   static var obs;
 
   Tecnico({

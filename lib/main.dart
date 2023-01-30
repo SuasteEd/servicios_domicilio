@@ -6,10 +6,15 @@ import 'package:servicios_domicilio/data_source/data_reponse.dart';
 import 'package:servicios_domicilio/repository/data_source_repository.dart';
 import 'package:servicios_domicilio/router/app_routes.dart';
 import 'package:servicios_domicilio/services/push_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'services/network_service.dart';
+
+late SharedPreferences sharedPreferences;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //
+  sharedPreferences = await SharedPreferences.getInstance();
   //
   await PushNotificationService.initializeApp();
   //Initialize DataSource
@@ -39,7 +44,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     PushNotificationService.messageStream.listen((message) {
-      print('MyApp: $message');
+      //print('MyApp: $message');
       // final snackBar = SnackBar(content: Text(message));
       // navigatorKey.currentState?.pushNamed('loading', arguments: message);
       // scaffoldKey.currentState?.showSnackBar(snackBar);

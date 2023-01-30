@@ -7,6 +7,9 @@ class CustomInput extends StatelessWidget {
   final bool obscureText;
   final TextEditingController controller;
   final TextInputType type;
+  final FocusNode focus;
+  final Function()? editing;
+  final TextInputAction? action;
   const CustomInput(
       {Key? key,
       required this.size,
@@ -14,7 +17,10 @@ class CustomInput extends StatelessWidget {
       required this.icon,
       required this.obscureText,
       required this.controller,
-      required this.type})
+      required this.type,
+      required this.focus,
+      this.editing,
+      this.action})
       : super(key: key);
 
   @override
@@ -45,8 +51,16 @@ class CustomInput extends StatelessWidget {
         ),
         keyboardType: type,
         cursorColor: Colors.white,
+        style: const TextStyle(color: Colors.white),
         obscureText: obscureText,
+        focusNode: focus,
+        onEditingComplete: editing,
+        textInputAction: action,
       ),
     );
+  }
+
+  void requestFocus(BuildContext context, FocusNode focusNode) {
+    FocusScope.of(context).requestFocus(focusNode);
   }
 }

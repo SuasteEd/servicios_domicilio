@@ -1,14 +1,14 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
-
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:location/location.dart';
 import 'package:servicios_domicilio/constants/constants.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
 import 'package:servicios_domicilio/widgets/custom_get_list.dart';
 import 'package:servicios_domicilio/widgets/widgets.dart';
 
 import '../controllers/servicios_controller.dart';
+import '../main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,8 +23,35 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    getCurrentLocation();
     Get.put(ServiciosController()).getServicio();
     super.initState();
+  }
+
+  Future<void> getCurrentLocation() async {
+    //Ensure all permissions are collected for location
+    Location location = Location();
+    bool? serviceEnabled;
+    PermissionStatus? permissionsGranted;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+    }
+
+    permissionsGranted = await location.hasPermission();
+    if (permissionsGranted == PermissionStatus.denied) {
+      permissionsGranted = await location.requestPermission();
+    }
+
+    //Get the current user location
+    LocationData locationData = await location.getLocation();
+    //Store the user location in sharedPreferences
+    sharedPreferences.setDouble('latitude', locationData.latitude!);
+    sharedPreferences.setDouble('longitude', locationData.longitude!);
+
+    //print(locationData.latitude);
+    //print(locationData.altitude);
   }
 
   @override
@@ -110,12 +137,13 @@ class _HeaderState extends State<_Header> {
                 Padding(
                   padding: const EdgeInsets.only(right: 50),
                   child: FadeInRight(
-                    child: GestureDetector(
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
                       onTap: () {
                         controller.getServicio();
                         setState(() {});
                       },
-                      child: Container(
+                      child: Ink(
                         width: 120,
                         height: 50,
                         decoration: BoxDecoration(
@@ -136,7 +164,7 @@ class _HeaderState extends State<_Header> {
             ),
           ),
         ),
-        FadeInUp(child: _EntregasList()),
+        FadeInUp(child: const _EntregasList()),
       ],
     );
   }
@@ -159,22 +187,11 @@ class _EntregasList extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: Column(
-          children: [
-            // Container(
-            //   height: 120,
-            //   decoration: const BoxDecoration(
-            //     borderRadius: BorderRadius.only(topLeft: Radius.circular(45)),
-            //     //color: Colors.amber,
-            //   ),
-            //   child: const Center(
-            //     child: Padding(
-            //         padding: EdgeInsets.only(left: 20), child: _DiasList()),
-            //   ),
-            // ),
-            const SizedBox(
+          children: const [
+            SizedBox(
               height: 30,
             ),
-            const SingleChildScrollView(
+            SingleChildScrollView(
               child: SizedBox(height: 580, child: CustomGetList()),
             ),
           ],

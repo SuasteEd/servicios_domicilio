@@ -8,7 +8,7 @@ class AppRoutes {
     'home': (_) => const HomePage(),
     'login': (_) => const LoginPage(),
     'detalle': (_) => const DetallePage(),
-    'inicio': (_) => const Inicio()
+    'inicio': (_) => const Inicio(),
   };
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {

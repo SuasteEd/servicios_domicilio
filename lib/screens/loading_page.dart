@@ -10,9 +10,7 @@ class LoadingPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Title'),
       ),
-      body: Container(
-        child: Text('$args'),
-      ),
+      body: Text('$args'),
     );
   }
 }

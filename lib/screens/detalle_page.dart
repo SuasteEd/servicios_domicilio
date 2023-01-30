@@ -1,5 +1,8 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:servicios_domicilio/helpers/mapbox_handler.dart';
+import 'package:servicios_domicilio/helpers/shared_prefs.dart';
+import 'package:servicios_domicilio/screens/mapa_detalle.dart';
 import 'package:servicios_domicilio/services/tecnico_response.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
 
@@ -29,6 +32,24 @@ class DetallePage extends StatelessWidget {
             tec: tec,
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          LatLng source = getCurrentLatLngSharedPrefs();
+          LatLng destination = const LatLng(21.150355, -101.7127717);
+          Map modifiedResponse =
+              await getDirectionsAPIResponse(source, destination);
+          // ignore: use_build_context_synchronously
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => MapaDetalle(
+                      modifiedResponse: modifiedResponse, tec: tec)));
+        },
+        tooltip: 'Ver en el mapa',
+        child: const Icon(
+          Icons.map,
+        ),
       ),
     );
   }
@@ -96,9 +117,11 @@ class _Card extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text(tec.horario,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.w500)),
+              Text(
+                tec.horario,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
             ],
           ),
         ),

@@ -6,9 +6,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:servicios_domicilio/helpers/shared_prefs.dart';
+import 'package:servicios_domicilio/main.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
 import 'package:servicios_domicilio/widgets/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/servicios_controller.dart';
 import '../services/network_service.dart';
@@ -27,14 +28,14 @@ class _LoginPageState extends State<LoginPage> {
   String token = '';
   int id = 0;
   bool isLogin = false;
-  late SharedPreferences logindata;
   final controller = Get.put(ServiciosController());
   final storage = const FlutterSecureStorage();
   final GlobalKey<ScaffoldMessengerState> scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
+  final FocusNode focusUser = FocusNode();
+  final FocusNode focusPass = FocusNode();
   void initData() async {
-    logindata = await SharedPreferences.getInstance();
-    isLogin = logindata.getBool('isLogin') ?? false;
+    isLogin = getIsLoginSharedPrefs();
     if (isLogin) {
       // ignore: use_build_context_synchronously
       Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
@@ -107,6 +108,11 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: false,
                       controller: username,
                       type: TextInputType.emailAddress,
+                      focus: focusUser,
+                      editing: () {
+                        requestFocus(context, focusPass);
+                      },
+                      action: TextInputAction.next,
                     ),
                   ),
                   const SizedBox(
@@ -120,6 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                       controller: password,
                       type: TextInputType.text,
+                      focus: focusPass,
                     ),
                   ),
                   const SizedBox(
@@ -204,11 +211,11 @@ class _LoginPageState extends State<LoginPage> {
       controller.id = id;
       setState(() {});
       await sendToken(id);
-      logindata.setInt('id', id);
-      logindata.setString('token', token);
-      logindata.setBool('isLogin', isLogin);
-      logindata.setString('username', username.text);
-      logindata.setString('password', password.text);
+      sharedPreferences.setInt('id', id);
+      sharedPreferences.setString('token', token);
+      sharedPreferences.setBool('isLogin', isLogin);
+      sharedPreferences.setString('username', username.text);
+      sharedPreferences.setString('password', password.text);
       if (token.isNotEmpty) {
         // ignore: use_build_context_synchronously
         Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
@@ -235,9 +242,9 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     if (res.statusCode == 200) {
-      print('Si jala');
+      //print('True');
     } else {
-      print('No le sabes');
+      //print('False');
     }
   }
 
@@ -265,5 +272,9 @@ class _LoginPageState extends State<LoginPage> {
     }
     tap = true;
     return true;
+  }
+
+  void requestFocus(BuildContext context, FocusNode focusNode) {
+    FocusScope.of(context).requestFocus(focusNode);
   }
 }
