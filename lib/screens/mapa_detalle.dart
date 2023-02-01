@@ -5,10 +5,12 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:servicios_domicilio/constants/constants.dart';
 import 'package:servicios_domicilio/helpers/mapbox_handler.dart';
 import 'package:servicios_domicilio/helpers/shared_prefs.dart';
+import 'package:servicios_domicilio/screens/detalle_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../controllers/servicios_controller.dart';
 import '../helpers/commonds.dart';
 import '../services/tecnico_response.dart';
+import 'package:quickalert/quickalert.dart';
 
 const url =
     'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}';
@@ -20,8 +22,12 @@ const markerSizeShrink = 35.0;
 class MapaDetalle extends StatefulWidget {
   final Map modifiedResponse;
   final ServicioElement tec;
+  final LatLng destination;
   const MapaDetalle(
-      {Key? key, required this.modifiedResponse, required this.tec})
+      {Key? key,
+      required this.modifiedResponse,
+      required this.tec,
+      required this.destination})
       : super(key: key);
 
   @override
@@ -45,7 +51,7 @@ class _MapaDetalleState extends State<MapaDetalle>
   //
 
   _initializeDirectionsResponse() {
-    destination = LatLng(widget.tec.latitude, widget.tec.latitude);
+    destination = widget.destination;
     distance = (widget.modifiedResponse['distance'] / 1000).toStringAsFixed(1);
     dropOffTime = getDropOffTime(widget.modifiedResponse['duration']);
     geometry = widget.modifiedResponse['geometry'];
@@ -205,7 +211,19 @@ class _MapaDetalleState extends State<MapaDetalle>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _launchNavigation();
+          QuickAlert.show(
+              context: context,
+              type: QuickAlertType.confirm,
+              title: '¿Iniciar navegación?',
+              cancelBtnText: 'No',
+              confirmBtnText: 'Sí',
+              onConfirmBtnTap: () async {
+                await _launchNavigation(destination);
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
+              });
         },
         child: const Icon(Icons.navigation),
       ),
@@ -213,8 +231,9 @@ class _MapaDetalleState extends State<MapaDetalle>
   }
 }
 
-Future<void> _launchNavigation() async {
-  Uri url = Uri.parse('google.navigation:q=21.150355,-101.7127717');
+Future<void> _launchNavigation(LatLng destination) async {
+  Uri url = Uri.parse(
+      'google.navigation:q=${destination.latitude},${destination.longitude}');
   if (!await launchUrl(url)) {
     throw Exception('Could not launch $url');
   }

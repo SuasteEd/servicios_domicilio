@@ -1,59 +1,168 @@
+// import 'dart:convert';
+
+// class Servicio {
+//   Servicio({
+//     required this.tecnico,
+//     required this.servicios,
+//   });
+
+//   Tecnico tecnico;
+//   List<ServicioElement> servicios;
+
+//   factory Servicio.fromJson(String str) => Servicio.fromMap(json.decode(str));
+
+//   String toJson() => json.encode(toMap());
+
+//   factory Servicio.fromMap(Map<String, dynamic> json) => Servicio(
+//         tecnico: Tecnico.fromMap(json["tecnico"]),
+//         servicios: List<ServicioElement>.from(
+//             json["servicios"].map((x) => ServicioElement.fromMap(x))),
+//       );
+
+//   Map<String, dynamic> toMap() => {
+//         "tecnico": tecnico.toMap(),
+//         "servicios": List<dynamic>.from(servicios.map((x) => x.toMap())),
+//       };
+// }
+
+// class ServicioElement {
+//   ServicioElement({
+//     required this.folio,
+//     required this.cliente,
+//     required this.estado,
+//     required this.fecha,
+//     required this.horario,
+//     required this.telefono,
+//     required this.domicilio,
+//     this.latitude,
+//     this.longitude,
+//   });
+
+//   int folio;
+//   String cliente;
+//   int estado;
+//   DateTime fecha;
+//   String horario;
+//   String telefono;
+//   String domicilio;
+//   double? longitude;
+//   double? latitude;
+
+//   factory ServicioElement.fromJson(String str) =>
+//       ServicioElement.fromMap(json.decode(str));
+
+//   String toJson() => json.encode(toMap());
+
+//   factory ServicioElement.fromMap(Map<String, dynamic> json) => ServicioElement(
+//         folio: json["folio"],
+//         cliente: json["cliente"],
+//         estado: json["estado"],
+//         fecha: DateTime.parse(json["fecha"]),
+//         horario: json["horario"],
+//         telefono: json["telefono"],
+//         domicilio: json["domicilio"],
+//         latitude: json["latitud"],
+//         longitude: json["longitud"],
+//       );
+
+//   Map<String, dynamic> toMap() => {
+//         "folio": folio,
+//         "cliente": cliente,
+//         "estado": estado,
+//         "fecha": fecha.toIso8601String(),
+//         "horario": horario,
+//         "telefono": telefono,
+//         "domicilio": domicilio,
+//         "latitude": latitude,
+//         "longitude": longitude,
+//       };
+// }
+
+// class Tecnico {
+//   // ignore: prefer_typing_uninitialized_variables
+//   static var obs;
+
+//   Tecnico({
+//     required this.nombre,
+//     required this.fotografia,
+//   });
+
+//   String nombre;
+//   String fotografia;
+
+//   factory Tecnico.fromJson(String str) => Tecnico.fromMap(json.decode(str));
+
+//   String toJson() => json.encode(toMap());
+
+//   factory Tecnico.fromMap(Map<String, dynamic> json) => Tecnico(
+//         nombre: json["nombre"],
+//         fotografia: json["fotografia"],
+//       );
+
+//   Map<String, dynamic> toMap() => {
+//         "nombre": nombre,
+//         "fotografia": fotografia,
+//       };
+// }
+
+// To parse this JSON data, do
+//
+//     final servicio = servicioFromMap(jsonString);
+
 import 'dart:convert';
 
 class Servicio {
-  Servicio({
-    required this.tecnico,
-    required this.servicios,
-  });
+    Servicio({
+        required this.tecnico,
+        required this.servicios,
+    });
 
-  Tecnico tecnico;
-  List<ServicioElement> servicios;
+    Tecnico tecnico;
+    List<ServicioElement> servicios;
 
-  factory Servicio.fromJson(String str) => Servicio.fromMap(json.decode(str));
+    factory Servicio.fromJson(String str) => Servicio.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
+    String toJson() => json.encode(toMap());
 
-  factory Servicio.fromMap(Map<String, dynamic> json) => Servicio(
+    factory Servicio.fromMap(Map<String, dynamic> json) => Servicio(
         tecnico: Tecnico.fromMap(json["tecnico"]),
-        servicios: List<ServicioElement>.from(
-            json["servicios"].map((x) => ServicioElement.fromMap(x))),
-      );
+        servicios: List<ServicioElement>.from(json["servicios"].map((x) => ServicioElement.fromMap(x))),
+    );
 
-  Map<String, dynamic> toMap() => {
+    Map<String, dynamic> toMap() => {
         "tecnico": tecnico.toMap(),
         "servicios": List<dynamic>.from(servicios.map((x) => x.toMap())),
-      };
+    };
 }
 
 class ServicioElement {
-  ServicioElement({
-    required this.folio,
-    required this.cliente,
-    required this.estado,
-    required this.fecha,
-    required this.horario,
-    required this.telefono,
-    required this.domicilio,
-    required this.latitude,
-    required this.longitude,
-  });
+    ServicioElement({
+        required this.folio,
+        required this.cliente,
+        required this.estado,
+        required this.fecha,
+        required this.horario,
+        required this.telefono,
+        required this.domicilio,
+        this.latitud,
+        this.longitud,
+    });
 
-  int folio;
-  String cliente;
-  int estado;
-  DateTime fecha;
-  String horario;
-  String telefono;
-  String domicilio;
-  double longitude;
-  double latitude;
+    int folio;
+    String cliente;
+    int estado;
+    DateTime fecha;
+    String horario;
+    String telefono;
+    String domicilio;
+    double? latitud;
+    double? longitud;
 
-  factory ServicioElement.fromJson(String str) =>
-      ServicioElement.fromMap(json.decode(str));
+    factory ServicioElement.fromJson(String str) => ServicioElement.fromMap(json.decode(str));
 
-  String toJson() => json.encode(toMap());
+    String toJson() => json.encode(toMap());
 
-  factory ServicioElement.fromMap(Map<String, dynamic> json) => ServicioElement(
+    factory ServicioElement.fromMap(Map<String, dynamic> json) => ServicioElement(
         folio: json["folio"],
         cliente: json["cliente"],
         estado: json["estado"],
@@ -61,11 +170,11 @@ class ServicioElement {
         horario: json["horario"],
         telefono: json["telefono"],
         domicilio: json["domicilio"],
-        latitude: json["latitude"],
-        longitude: json["longitude"],
-      );
+        latitud: json["latitud"]?.toDouble(),
+        longitud: json["longitud"]?.toDouble(),
+    );
 
-  Map<String, dynamic> toMap() => {
+    Map<String, dynamic> toMap() => {
         "folio": folio,
         "cliente": cliente,
         "estado": estado,
@@ -73,34 +182,32 @@ class ServicioElement {
         "horario": horario,
         "telefono": telefono,
         "domicilio": domicilio,
-        "latitude": latitude,
-        "longitude": longitude,
-      };
+        "latitud": latitud,
+        "longitud": longitud,
+    };
 }
 
 class Tecnico {
-  // ignore: prefer_typing_uninitialized_variables
-  static var obs;
+    Tecnico({
+        required this.nombre,
+        required this.fotografia,
+    });
 
-  Tecnico({
-    required this.nombre,
-    required this.fotografia,
-  });
+    String nombre;
+    String fotografia;
 
-  String nombre;
-  String fotografia;
+    factory Tecnico.fromJson(String str) => Tecnico.fromMap(json.decode(str));
 
-  factory Tecnico.fromJson(String str) => Tecnico.fromMap(json.decode(str));
+    String toJson() => json.encode(toMap());
 
-  String toJson() => json.encode(toMap());
-
-  factory Tecnico.fromMap(Map<String, dynamic> json) => Tecnico(
+    factory Tecnico.fromMap(Map<String, dynamic> json) => Tecnico(
         nombre: json["nombre"],
         fotografia: json["fotografia"],
-      );
+    );
 
-  Map<String, dynamic> toMap() => {
+    Map<String, dynamic> toMap() => {
         "nombre": nombre,
         "fotografia": fotografia,
-      };
+    };
 }
+

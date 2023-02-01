@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:servicios_domicilio/helpers/mapbox_handler.dart';
 import 'package:servicios_domicilio/helpers/shared_prefs.dart';
 import 'package:servicios_domicilio/screens/mapa_detalle.dart';
@@ -36,15 +37,27 @@ class DetallePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           LatLng source = getCurrentLatLngSharedPrefs();
-          LatLng destination = const LatLng(21.150355, -101.7127717);
-          Map modifiedResponse =
-              await getDirectionsAPIResponse(source, destination);
-          // ignore: use_build_context_synchronously
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => MapaDetalle(
-                      modifiedResponse: modifiedResponse, tec: tec)));
+          if (tec.latitud == null) {
+            QuickAlert.show(
+              context: context,
+              title: 'Lo sentimos',
+              confirmBtnText: 'Ok',
+              type: QuickAlertType.error,
+              text: 'El cliente no tiene coordenadas',
+            );
+          } else {
+            Map modifiedResponse =
+                await getDirectionsAPIResponse(source, LatLng(tec.latitud!, tec.longitud!));
+            // ignore: use_build_context_synchronously
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => MapaDetalle(
+                          modifiedResponse: modifiedResponse,
+                          tec: tec,
+                          destination: LatLng(tec.latitud!, tec.longitud!),
+                        )));
+          }
         },
         tooltip: 'Ver en el mapa',
         child: const Icon(
