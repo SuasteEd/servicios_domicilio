@@ -1,6 +1,9 @@
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:servicios_domicilio/main.dart';
 
+//Consultas de datos almacenados en SharedPreferences
+
+//Obtener las coordenadas
 LatLng getCurrentLatLngSharedPrefs() {
   return LatLng(sharedPreferences.getDouble('latitude')!,
       sharedPreferences.getDouble('longitude')!);

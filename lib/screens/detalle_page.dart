@@ -3,7 +3,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:servicios_domicilio/helpers/mapbox_handler.dart';
 import 'package:servicios_domicilio/helpers/shared_prefs.dart';
-import 'package:servicios_domicilio/screens/mapa_detalle.dart';
+import 'package:servicios_domicilio/screens/screens.dart';
 import 'package:servicios_domicilio/services/tecnico_response.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
 

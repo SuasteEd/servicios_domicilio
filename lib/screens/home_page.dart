@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:location/location.dart';
 import 'package:servicios_domicilio/constants/constants.dart';
 import 'package:servicios_domicilio/theme/app_theme.dart';
-import 'package:servicios_domicilio/widgets/custom_get_list.dart';
 import 'package:servicios_domicilio/widgets/widgets.dart';
 
 import '../controllers/servicios_controller.dart';

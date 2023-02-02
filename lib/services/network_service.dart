@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
+//Enum de estados de red
 enum NetworkStatus { online, offline }
 
+//Creación de la clase NetworkService para la conexión de red.
 class NetworkService {
   StreamController<NetworkStatus> controller = StreamController();
 

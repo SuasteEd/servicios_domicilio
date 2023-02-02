@@ -7,6 +7,7 @@ String baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
 String accessToken = mapboxToken;
 String navType = 'driving';
 
+//Dio es lo mismo que el paquete http.
 Dio _dio = Dio();
 
 Future getRouteUsingMapBox(LatLng source, LatLng destination) async {

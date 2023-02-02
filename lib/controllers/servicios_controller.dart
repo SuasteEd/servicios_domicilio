@@ -20,13 +20,11 @@ class ServiciosController extends GetxController {
 
   init() {
     id = logindata.getInt('id') ?? 0;
-    // getTecnico();
   }
 
   Future<void> getServicio() async {
     servicios.clear();
     getTec();
-    //await internet();
     final newServicio = await Get.find<DataSourceRepository>().getServicio(id);
 
     if (newServicio.isEmpty) {

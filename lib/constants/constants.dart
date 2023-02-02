@@ -14,5 +14,6 @@ final List<String> months = [
 ];
 final List<String> days = ['Lun', 'Mar', 'Miér', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
+//Key pública de MapBox.
 const String mapboxToken =
-    'pk.eyJ1IjoiZS1zdWFzdGUiLCJhIjoiY2xkMG9qMTV2MDM5cTNxcDdpemUyZnoxbyJ9.wx4B0HJei5h2bxWhApXZ0Q';
+    'pk.eyJ1IjoiZW5lcm1heCIsImEiOiJjbGRtZWh3MHIwOG5sM3ZueDNqOTE4YnQwIn0.lpBdFIir6r1aRHGDAfKpbw';

@@ -5,19 +5,11 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:servicios_domicilio/constants/constants.dart';
 import 'package:servicios_domicilio/helpers/mapbox_handler.dart';
 import 'package:servicios_domicilio/helpers/shared_prefs.dart';
-import 'package:servicios_domicilio/screens/detalle_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../controllers/servicios_controller.dart';
 import '../helpers/commonds.dart';
 import '../services/tecnico_response.dart';
 import 'package:quickalert/quickalert.dart';
-
-const url =
-    'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}';
-const mapboxStyle = 'mapbox/navigation-night-v1';
-const accessToken = mapboxToken;
-const markerSizeExpanded = 55.0;
-const markerSizeShrink = 35.0;
 
 class MapaDetalle extends StatefulWidget {
   final Map modifiedResponse;
@@ -34,9 +26,7 @@ class MapaDetalle extends StatefulWidget {
   State<MapaDetalle> createState() => _MapaDetalleState();
 }
 
-class _MapaDetalleState extends State<MapaDetalle>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _animationController;
+class _MapaDetalleState extends State<MapaDetalle> {
   final myLocation = getCurrentLatLngSharedPrefs();
   final _pageController = PageController();
   final controller = Get.put(ServiciosController());
@@ -52,12 +42,16 @@ class _MapaDetalleState extends State<MapaDetalle>
 
   _initializeDirectionsResponse() {
     destination = widget.destination;
+    //Obtenemos la distancia
     distance = (widget.modifiedResponse['distance'] / 1000).toStringAsFixed(1);
+    //Obtenemos la hora estimada de llegada
     dropOffTime = getDropOffTime(widget.modifiedResponse['duration']);
+    //Obtenemos el mapa de coordenadas para trazar la ruta
     geometry = widget.modifiedResponse['geometry'];
   }
 
   _addSourceAndLineLayer() async {
+    //Agregamos el marcador del destino
     await controllerMap.addSymbol(
       SymbolOptions(
         geometry: destination,
@@ -100,18 +94,15 @@ class _MapaDetalleState extends State<MapaDetalle>
   @override
   void initState() {
     _initializeDirectionsResponse();
+    //Generamos la vista del mapa.
     _cameraPosition = CameraPosition(
         target: getCenterCoordinatesForPolyline(geometry), zoom: 15);
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    _animationController.repeat(reverse: true);
-
     super.initState();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    controllerMap.dispose();
     super.dispose();
   }
 
@@ -125,6 +116,7 @@ class _MapaDetalleState extends State<MapaDetalle>
             accessToken: mapboxToken,
             initialCameraPosition: _cameraPosition,
             onMapCreated: _onMapCreated,
+            //Estilo del mapa
             styleString: 'mapbox://styles/mapbox/satellite-streets-v12',
             onStyleLoadedCallback: _addSourceAndLineLayer,
             myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
@@ -231,6 +223,7 @@ class _MapaDetalleState extends State<MapaDetalle>
   }
 }
 
+//Navegación con google maps
 Future<void> _launchNavigation(LatLng destination) async {
   Uri url = Uri.parse(
       'google.navigation:q=${destination.latitude},${destination.longitude}');
