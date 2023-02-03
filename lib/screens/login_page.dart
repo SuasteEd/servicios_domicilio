@@ -185,16 +185,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void login() async {
-    // if (controller.connection.isFalse) {
-    //   QuickAlert.show(
-    //     context: context,
-    //     title: 'Oh, no...',
-    //     confirmBtnText: 'Ok',
-    //     type: QuickAlertType.warning,
-    //     text: 'No tienes conexión a internet',
-    //   );
-    //   tap = false;
-    // }
     var bodyReq =
         jsonEncode({'username': username.text, 'password': password.text});
     var url =

@@ -44,10 +44,11 @@ class _MapaDetalleState extends State<MapaDetalle> {
     destination = widget.destination;
     //Obtenemos la distancia
     distance = (widget.modifiedResponse['distance'] / 1000).toStringAsFixed(1);
-    //Obtenemos la hora estimada de llegada
+    //Convertimos la hora estimada de llegada
     dropOffTime = getDropOffTime(widget.modifiedResponse['duration']);
     //Obtenemos el mapa de coordenadas para trazar la ruta
     geometry = widget.modifiedResponse['geometry'];
+    //final time = ((widget.modifiedResponse['duration']) / 60).round();
   }
 
   _addSourceAndLineLayer() async {
@@ -98,12 +99,6 @@ class _MapaDetalleState extends State<MapaDetalle> {
     _cameraPosition = CameraPosition(
         target: getCenterCoordinatesForPolyline(geometry), zoom: 15);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    controllerMap.dispose();
-    super.dispose();
   }
 
   @override
